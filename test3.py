@@ -1,4 +1,4 @@
-from src.photogrammetry_ai import PhotogrammetryPipeline
+from photogrammetry_ai import PhotogrammetryPipeline
 import os
 
 image_dir = "/home/jourdelune/Images/colmap/input"
