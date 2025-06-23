@@ -33,18 +33,21 @@ class PhotogrammetryPipeline:
         self.max_batch_size = max_batch_size
         self.min_match_count = min_match_count
 
-    def build_batches(self, images: list[str]) -> tuple[list[list[str]], list[str]]:
+    def build_batches(
+        self, images: list[str], display_graph: bool = False
+    ) -> tuple[list[list[str]], list[str]]:
         """
         Build batches of images based on the matcher and the specified batch size.
 
         Args:
             images (list[str]): List of image file paths.
+            display_graph (bool, optional): Whether to visualize the graph of images. Defaults to False.
 
         Returns:
             tuple: A tuple containing a list of batches and a list of missing images.
         """
         return self.batcher.build_batches(
-            images, self.max_batch_size, self.min_match_count
+            images, self.max_batch_size, self.min_match_count, display_graph
         )
 
     def process(self, images: list[str]) -> PhotogrammetryPipelineResults:
