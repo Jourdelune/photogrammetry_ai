@@ -1,11 +1,21 @@
 from typing import List, Tuple
 
+from photogrammetry_ai.matching.base import Matcher
+
 from .graph import binary_tree_to_list, convert_to_binary_tree, visualize_graph
 
 
 class Batcher:
-    def __init__(self, matcher):
+    def __init__(self, matcher: Matcher, overlopping_images: int = 0) -> None:
+        """
+        Initialize the Batcher with a matcher.
+
+        Args:
+            matcher (Matcher): The matcher used to find correspondences between images.
+            overlopping_images (int, optional): Number of images to overlap in each batch. Defaults to 0.
+        """
         self.matcher = matcher
+        self.overlopping_images = overlopping_images
 
     def build_batches(
         self,
@@ -48,7 +58,15 @@ class Batcher:
         ordered_images = binary_tree_to_list(binary_tree, root)
 
         # Create batches from the ordered images
-        for i in range(0, len(ordered_images), max_batch_size):
+        for i in range(
+            0,
+            len(ordered_images),
+            (
+                max_batch_size
+                if not self.overlopping_images
+                else max_batch_size - self.overlopping_images
+            ),
+        ):
             batch = ordered_images[i : i + max_batch_size]
             batches.append(batch)
         return batches, unmatched_images
