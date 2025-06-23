@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "ipywidgets>=8.1.7",
     "lightglue",
     "networkx>=3.5",
     "open3d>=0.19.0",

@@ -1,24 +1,12 @@
-from lightglue import LightGlue, SuperPoint, DISK, SIFT, ALIKED, DoGHardNet
-from lightglue.utils import load_image, rbd
+import open3d as o3d
 
-# SuperPoint+LightGlue
-extractor = SuperPoint(max_num_keypoints=2048).eval().cuda()  # load the extractor
-matcher = LightGlue(features="superpoint").eval().cuda()  # load the matcher
+sample_ply_data = o3d.data.PLYPointCloud()
+pcd = o3d.io.read_point_cloud(sample_ply_data.path)
 
-# load each image as a torch.Tensor on GPU with shape (3,H,W), normalized in [0,1]
-image0 = load_image("/home/jourdelune/Images/colmap/input/image12.jpg").cuda()
-image1 = load_image("/home/jourdelune/Images/colmap/input/image13.jpg").cuda()
-
-# extract local features
-feats0 = extractor.extract(image0)  # auto-resize the image, disable with resize=None
-feats1 = extractor.extract(image1)
-
-# match the features
-matches01 = matcher({"image0": feats0, "image1": feats1})
-feats0, feats1, matches01 = [
-    rbd(x) for x in [feats0, feats1, matches01]
-]  # remove batch dimension
-matches = matches01["matches"]  # indices with shape (K,2)
-points0 = feats0["keypoints"][matches[..., 0]]  # coordinates in image #0, shape (K,2)
-points1 = feats1["keypoints"][matches[..., 1]]  # coordinates in image #1, shape (K,2)
-
+o3d.visualization.draw_geometries(
+    [pcd],
+    zoom=0.3412,
+    front=[0.4257, -0.2125, -0.8795],
+    lookat=[2.6172, 2.0475, 1.532],
+    up=[-0.0694, -0.9768, 0.2024],
+)

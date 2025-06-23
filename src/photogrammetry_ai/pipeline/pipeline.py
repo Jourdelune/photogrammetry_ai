@@ -94,9 +94,12 @@ class PhotogrammetryPipeline:
                 "/home/jourdelune/Images/colmap/input/image17.jpg",
             ],
         ]
+        missing_images = []
 
         for batch in batches:
             out = self.reconstructor.reconstruct(batch)
 
-        out = PhotogrammetryPipelineResults(images=images, missing_images=[])
+        out = PhotogrammetryPipelineResults(
+            images=images, missing_images=missing_images
+        )
         return out

@@ -39,7 +39,7 @@ class VGGTReconstructor(Reconstructor):
             else torch.float16
         )
 
-        self.model = VGGT.from_pretrained("facebook/VGGT-1B").to(self.device)
+        # self.model = VGGT.from_pretrained("facebook/VGGT-1B").to(self.device)
 
         self.vggt_fixed_resolution = vggt_fixed_resolution
         self.img_load_resolution = img_load_resolution
