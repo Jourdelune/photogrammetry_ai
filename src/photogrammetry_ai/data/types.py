@@ -8,6 +8,7 @@ class PhotogrammetryPipelineResults:
     """
 
     images: list[str]
+    missing_images: list[str]
 
     def export_colmap(self, output_dir: str) -> None:
         """
