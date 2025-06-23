@@ -2,6 +2,7 @@ from photogrammetry_ai.alignment import Aligner
 from photogrammetry_ai.data import PhotogrammetryPipelineResults
 from photogrammetry_ai.matching import Matcher
 from photogrammetry_ai.reconstruction import Reconstructor
+from .batcher import Batcher
 
 
 class PhotogrammetryPipeline:
@@ -12,12 +13,17 @@ class PhotogrammetryPipeline:
         aligner: Aligner,
         max_batch_size: int = 4,
     ) -> None:
-        self.matcher = matcher
+        self.batcher = Batcher(matcher=matcher)
         self.reconstructor = reconstructor
         self.aligner = aligner
 
         self.max_batch_size = max_batch_size
 
     def process(self, images: list[str]) -> PhotogrammetryPipelineResults:
+        batches = self.batcher.build_batches(images, self.max_batch_size)
+
+        for batch in batches:
+            print(f"Processing batch: {batch}")
+
         out = PhotogrammetryPipelineResults(images=images)
         return out
